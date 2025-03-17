@@ -48,6 +48,7 @@ jobs:
           script: |
             # Navigate to backend directory
             cd /home/ubuntu/archet
+            git reset --hard origin/main
             git pull origin main
             source venv/bin/activate  # Activate virtual environment
             pip install -r requirements.txt
