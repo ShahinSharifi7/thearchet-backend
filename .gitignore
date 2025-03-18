@@ -1,0 +1,52 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Django specific
+*.log
+*.sqlite3
+db.sqlite3
+*.db
+
+# Django migrations
+*/migrations/
+
+# Static files directory (if using `collectstatic`)
+static/
+
+# Media files
+media/
+
+# IDEs and editor files
+.vscode/
+.idea/
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+
+# Python virtual environment folder, if you are using Pipenv
+Pipfile.lock
+
+# Python virtual environment folder, if you are using poetry
+poetry.lock
+
+# pyenv
+.python-version
+
+# Coverage reports
+.coverage
+coverage.xml
+*.cover
+
+# Django secret key and settings (ensure sensitive information isn't pushed)
+*.env
+.env
