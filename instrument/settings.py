@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -113,6 +114,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # Increase lifetime
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Keep refresh tokens valid for 7 days
+    "ROTATE_REFRESH_TOKENS": False,  # Set to False if unnecessary
+    "BLACKLIST_AFTER_ROTATION": True,  # Avoid using old refresh tokens
+}
 
 AUTH_USER_MODEL = "users.User"
 CORS_ALLOW_ALL_ORIGINS = True
