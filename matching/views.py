@@ -333,6 +333,7 @@ class MatchingView(APIView):
 
                 Distbetween[i, j] = distance
                 Distbetween[j, i] = distance  # Maintain symmetry
+                print(distance)
 
         # Convert to DataFrame
         Distbetween_df = pd.DataFrame(Distbetween, index=ids, columns=ids)
@@ -365,10 +366,30 @@ class MatchingView(APIView):
                 prob += X[i, j] == X[j, i]
 
         # ✅ Constraint 3: Distance Constraint using 'Prefered distance' from dataset
-        # for i in [user_id]:
+        # for i in ids:
         #     Di = copy_dataset.loc[copy_dataset["ID"] == i, "Prefered distance"].values[0]
+        #     Di = float(Di)
         #     print("inja ", Di)
         #     prob += pulp.lpSum(X[i, j] * Dij_df.loc[i, j] for j in ids if i != j) <= Di
+        request_user_id = user_id  # Only enforce for the request user
+
+        # ✅ Get the preferred distance from the request
+
+        # ✅ Check if the user provided a preferred distance before applying the constraint
+        if user.preferred_distance is not None:
+            print("this is it ", user.preferred_distance)
+            Di_values = copy_dataset.loc[copy_dataset["ID"] == user_id, "Prefered distance"].values
+            Di = float(Di_values[0]) if len(Di_values) > 0 and pd.notna(Di_values[0]) else None
+            print(f"📏 Distance Constraint: Max Distance for User {user_id} is {Di} km")
+
+            Dij_df.fillna(99999, inplace=True)  # Replace NaNs with a large number
+
+            prob += pulp.lpSum(
+                X[user_id, j] * Dij_df.loc[user_id, j]
+                for j in ids if user_id != j and not pd.isna(Dij_df.loc[user_id, j])
+            ) <= Di
+        else:
+            print(f"🚀 No preferred distance provided by User {user_id}. Skipping distance constraint.")
 
         # ✅ Constraint 4: No self-matching (X[i,i] = 0)
         for i in ids:
