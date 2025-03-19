@@ -79,7 +79,7 @@ class InstrumentSuggestionView(APIView):
         predicted_instrument = label_encoder.inverse_transform([prediction[0]])[0]
 
         instrument_instance = Instrument.objects.get(name=predicted_instrument)
-        InstrumentSuggestion.objects.update_or_create(user=user, suggested_instrument=instrument_instance)
+        InstrumentSuggestion.objects.create(user=user, suggested_instrument=instrument_instance)
 
         return Response({"name": predicted_instrument}, status=status.HTTP_200_OK)
 
