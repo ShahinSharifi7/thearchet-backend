@@ -21,6 +21,7 @@ class User(AbstractUser):
     academic_knowledge = models.CharField(max_length=3, null=True, blank=True)
     preferred_instrument = models.CharField(max_length=30, null=True, blank=True)
     preferred_clothing = models.CharField(max_length=30, null=True, blank=True)
+    preferred_distance = models.CharField(max_length=30, null=True, blank=True)
     instagram = models.TextField(max_length=1000, null=True, blank=True)
     spotify = models.TextField(max_length=1000, null=True, blank=True)
     soundcloud = models.TextField(max_length=1000, null=True, blank=True)

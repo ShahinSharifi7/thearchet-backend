@@ -27,6 +27,9 @@ class MatchingView(APIView):
             user for user in users
             if ProfileCompletionSerializer(user).data['is_profile_complete']
         ]
+        user = User.objects.get(id=user_id)
+        user.preferred_distance = request.data["responses"].get("Preferred Distance", None)
+        user.save()
 
         # Convert queryset to list of dictionaries
         data = [
@@ -44,7 +47,7 @@ class MatchingView(APIView):
                 'Decision Making': user.decision_making,
                 'Planning Style': user.planning_style,
                 'Instrument': user.preferred_instrument,
-                "Prefered distance": "1000",
+                "Prefered distance": user.preferred_distance if user.preferred_distance is not None else "20000",
                 'Genres': user.favorite_genre,
                 'Available time for train': user.available_time,
                 'Own song': user.own_song,
@@ -56,7 +59,6 @@ class MatchingView(APIView):
         ]
         # Create DataFrame
         dataset = pd.DataFrame(data)
-
 
         if request.data["responses"]["Academic Knowledge"] != "Never mind":
             dataset = dataset[
@@ -197,8 +199,6 @@ class MatchingView(APIView):
         n = len(ids)
         SGenresType = np.zeros((n, n))
 
-        print("after genres ids = ", ids)
-
         # Fill the matrix with compatibility scores
         for i in range(n):
             for j in range(n):
@@ -222,8 +222,6 @@ class MatchingView(APIView):
         # Assuming `dataset` contains the ID and Combined Personality column
         dataset['Level of experties'] = dataset['Level of experties'].astype(
             str).str.strip().str.upper()
-
-        print("after expertise ids = ", ids)
 
         Level_Compatibility_score.set_index("Level", inplace=True)
 
@@ -367,8 +365,9 @@ class MatchingView(APIView):
                 prob += X[i, j] == X[j, i]
 
         # ✅ Constraint 3: Distance Constraint using 'Prefered distance' from dataset
-        # for i in ids:
+        # for i in [user_id]:
         #     Di = copy_dataset.loc[copy_dataset["ID"] == i, "Prefered distance"].values[0]
+        #     print("inja ", Di)
         #     prob += pulp.lpSum(X[i, j] * Dij_df.loc[i, j] for j in ids if i != j) <= Di
 
         # ✅ Constraint 4: No self-matching (X[i,i] = 0)

@@ -62,7 +62,7 @@ class ProfileCompletionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["profile_picture", "first_name", "last_name", "birth_date", "gender", "city",
+        fields = ["profile_picture", "phone_number", "first_name", "last_name", "birth_date", "gender", "city",
                   "province", "personality_social", "personality_detail", "decision_making",
                   "planning_style", "level_of_expertise", "favorite_genre", "available_time", "own_song",
                   "academic_knowledge", "preferred_instrument", "preferred_clothing", "is_profile_complete",
@@ -70,7 +70,5 @@ class ProfileCompletionSerializer(serializers.ModelSerializer):
 
     def get_is_profile_complete(self, obj):
         required_fields = ["birth_date", "gender", "personality_social", "personality_detail", "decision_making",
-                           "planning_style", "city", "province", "level_of_expertise", "favorite_genre",
-                           "available_time", "own_song", "academic_knowledge", "preferred_instrument",
-                           "preferred_clothing"]
+                           "planning_style", "city", "province"]
         return all(getattr(obj, field) for field in required_fields)
