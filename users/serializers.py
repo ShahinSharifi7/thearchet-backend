@@ -48,7 +48,7 @@ class MessageProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "profile_picture"]
+        fields = ["username", "profile_picture"]
 
     def get_profile_picture(self, obj):
         request = self.context.get('request')

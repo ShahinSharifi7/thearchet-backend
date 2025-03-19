@@ -60,3 +60,12 @@ class SendMessageSerializer(serializers.ModelSerializer):
 
         validated_data['receiver'] = receiver
         return super().create(validated_data)
+
+
+class MessageDetailSerializer(serializers.ModelSerializer):
+    receiver = MessageProfileSerializer(read_only=True)
+    sender = MessageProfileSerializer(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['id', 'subject', 'text', 'sender', 'receiver', 'created_at', 'seen']

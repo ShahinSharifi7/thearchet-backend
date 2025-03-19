@@ -4,7 +4,8 @@ from rest_framework.views import APIView
 
 from .models import Message
 from .pagination import MessagePagination
-from .serializers import SendMessageSerializer, SentMessagesSerializer, ReceivedMessagesSerializer
+from .serializers import SendMessageSerializer, SentMessagesSerializer, ReceivedMessagesSerializer, \
+    MessageDetailSerializer
 
 
 class SendMessageAPIView(generics.CreateAPIView):
@@ -53,7 +54,8 @@ class DeleteMessageAPIView(APIView):
 
             # Ensure the user is the sender or receiver
             if message.sender != request.user and message.receiver != request.user:
-                return Response({"error": "You are not authorized to delete this message"}, status=status.HTTP_403_FORBIDDEN)
+                return Response({"error": "You are not authorized to delete this message"},
+                                status=status.HTTP_403_FORBIDDEN)
 
             # Soft delete for the requesting user
             message.delete_for_user(request.user)
@@ -66,3 +68,25 @@ class DeleteMessageAPIView(APIView):
 
         except Message.DoesNotExist:
             return Response({"error": "Message not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class MessageDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = MessageDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        message_id = self.kwargs.get('pk')  # Get message ID from the URL params
+        # Ensure the user is either the sender or receiver of the message
+        return Message.objects.filter(id=message_id,
+                                      sender=self.request.user) | \
+            Message.objects.filter(id=message_id,
+                                   receiver=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # Get the message object using the filtered queryset
+            message = self.get_object()
+            serializer = self.get_serializer(message)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Message.DoesNotExist:
+            return Response({"error": "Message not found or unauthorized access"}, status=status.HTTP_404_NOT_FOUND)
