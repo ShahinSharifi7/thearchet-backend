@@ -26,6 +26,7 @@ urlpatterns = [
     path("api/instrument/", include("instrument_suggestion.urls")),
     path("api/matching/", include("matching.urls")),
     path("api/message/", include("message.urls")),
+    path("api/spotify/", include("spotify_integration.urls")),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
