@@ -140,7 +140,7 @@ USE_TZ = True
 # Spotify
 SPOTIFY_CLIENT_ID = "40cd76b1822444b387afb0e13134ab17"
 SPOTIFY_CLIENT_SECRET = "dedfd1e6b3bf4f72b5d2600f2443809d"
-SPOTIFY_REDIRECT_URI = "http://localhost:8000/api/spotify/callback/"
+SPOTIFY_REDIRECT_URI = "https://thearchet.com/api/spotify/callback/"
 
 
 MEDIA_URL = '/media/'
