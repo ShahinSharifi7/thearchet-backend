@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'message',
     'matching',
     'spotify_integration',
+    'event_finder',
 ]
 
 MIDDLEWARE = [
