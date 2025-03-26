@@ -1,7 +1,7 @@
 import requests
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from datetime import datetime
+from dateutil import parser
 import pytz
 
 
@@ -17,7 +17,7 @@ class NearbyEventsView(APIView):
 
         def to_utc_z_format(date_str):
             try:
-                dt = datetime.fromisoformat(date_str)
+                dt = parser.isoparse(date_str)
                 return dt.astimezone(pytz.UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
             except Exception:
                 return None
