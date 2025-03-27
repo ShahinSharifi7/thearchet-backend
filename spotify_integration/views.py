@@ -59,7 +59,7 @@ def get_spotify_profile(request):
 
 # Refresh access token
 @api_view(["GET"])
-def refresh_spotify_token(request):
+def refresh_spotify_token_veiws(request):
     refresh_token = request.session.get("spotify_refresh_token")
     if not refresh_token:
         return Response({"error": "No refresh token found"}, status=400)
