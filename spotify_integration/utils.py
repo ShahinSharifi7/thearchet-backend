@@ -111,12 +111,12 @@ def get_user_top_ui_genres(access_token):
 
     for artist in data.get("items", []):
         for genre in artist.get("genres", []):
-            # mapped = map_genre(genre)
-            # if mapped:
-            genre_count[genre] += 1
+            mapped = map_genre(genre)
+            if mapped:
+                genre_count[mapped] += 1
 
     sorted_genres = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
 
     # Only return genres that exist in your UI
-    # return [GENRE_VALUES[genre] for genre, _ in sorted_genres if genre in GENRE_VALUES][:3]
-    return [genre for genre, _ in sorted_genres][:5]
+    allowed_ui_genres = set(GENRE_MAP.keys())
+    return [GENRE_VALUES[genre] for genre, _ in sorted_genres if genre in GENRE_VALUES][:3]
