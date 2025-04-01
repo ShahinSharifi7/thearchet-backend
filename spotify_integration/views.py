@@ -116,7 +116,7 @@ def spotify_callback(request):
         expires_in=data["expires_in"]
     )
 
-    frontend_redirect_url = f"https://thearchet.com/instrument-question-wizard?from=spotify""
+    frontend_redirect_url = f"https://thearchet.com/instrument-question-wizard?from=spotify"
 
     return HttpResponseRedirect(frontend_redirect_url)
 
